@@ -59,20 +59,19 @@ all: main-build
 # Main-build Target
 main-build: test2.elf secondary-outputs
 
-# Tool invocations
 test2.elf: $(OBJS) $(USER_OBJS) /home/thoma/STM32_Integration/STM32L010RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-    arm-none-eabi-gcc -o "test2.elf" @"objects.list" $(USER_OBJS) $(LIBS) \
-    -mcpu=cortex-m0plus \
-    -T"/home/thoma/STM32_Integration/STM32L010RBTX_FLASH.ld" \
-    --specs=nosys.specs -Wl,-Map="test2.map" -Wl,--gc-sections \
-    -static --specs=nano.specs -mfloat-abi=soft -mthumb \
-    -Wl,--start-group -lc -lm -Wl,--end-group
-    @echo 'Finished building target: $@'
-    @echo ' '
+	arm-none-eabi-gcc -o "test2.elf" @"objects.list" $(USER_OBJS) $(LIBS) \
+	-mcpu=cortex-m0plus \
+	-T"/home/thoma/STM32_Integration/STM32L010RBTX_FLASH.ld" \
+	--specs=nosys.specs -Wl,-Map="test2.map" -Wl,--gc-sections \
+	-static --specs=nano.specs -mfloat-abi=soft -mthumb \
+	-Wl,--start-group -lc -lm -Wl,--end-group
+	@echo 'Finished building target: $@'
+	@echo ' '
 
-# on le déclare dépendant de test2.elf pour éviter une deuxième commande
+# le .map est produit en même temps que l’elf
 test2.map: test2.elf
-    @echo 'Generated map file: $@'
+	@echo 'Generated map file: $@'
 
 default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-size  $(EXECUTABLES)
